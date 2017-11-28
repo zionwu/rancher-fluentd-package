@@ -2,10 +2,11 @@ FROM fluent/fluentd:stable-debian-onbuild
 MAINTAINER zhibo@rancher.com
 
 USER root
-COPY .apt.sources.list /etc/apt/sources.list
+#COPY .apt.sources.list /etc/apt/sources.list
 
 COPY entry.sh /usr/bin/
 COPY fluent-journald.conf /fluentd/etc/fluent-journald.conf
+COPY fluent.conf /fluentd/etc/fluent.conf
 
 RUN apt-get update \
  && apt-get upgrade -y \
@@ -24,6 +25,7 @@ RUN buildDeps="sudo make gcc g++ libc-dev ruby-dev" \
         fluent-plugin-elasticsearch \
         fluent-plugin-systemd \
         systemd-journal \
+        fluent-plugin-docker_metadata_filter \
 
  && sudo -u fluent gem sources --clear-all \
  && SUDO_FORCE_REMOVE=yes \
